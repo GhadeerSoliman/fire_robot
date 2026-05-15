@@ -1,0 +1,268 @@
+ <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فريق العمل والخاتمة | روبوت تتبع الحرائق</title>
+    <style>
+        :root {
+            --primary-color: #d32f2f; 
+            --secondary-color: #f57c00; 
+            --dark-bg: #1e1e24; 
+            --card-bg: #2a2a32; 
+            --light-text: #ffffff;
+            --muted-text: #b0bec5;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background-color: rgba(42, 42, 50, 0.95);
+            border-bottom: 3px solid var(--primary-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            height: 130px; 
+            box-sizing: border-box;
+        }
+
+        .university-info {
+            flex: 1;
+            text-align: right;
+            font-size: 0.85rem;
+            font-weight: bold;
+            line-height: 1.6; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .nav-buttons {
+            flex: 2;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .logo-container {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .logo-box {
+            width: 120px;  
+            height: 120px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .btn {
+            background-color: transparent;
+            color: var(--light-text);
+            border: 2px solid var(--primary-color);
+            padding: 8px 22px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn.active {
+            background-color: var(--primary-color) !important;
+            box-shadow: 0 0 15px var(--primary-color);
+            color: white;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 50px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .project-title {
+            font-size: 2.8rem;
+            color: var(--secondary-color);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+            font-weight: 800;
+        }
+
+        .project-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 45px;
+            font-weight: 300;
+        }
+
+        .content-section {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: justify;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            border-right: 5px solid var(--secondary-color);
+            margin-bottom: 40px;
+        }
+
+        .team-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .member-card {
+            background-color: #1e1e24;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 25px 20px;
+            width: 290px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+ .supervisor-card {
+            max-width: 480px;
+            margin: 40px auto 10px auto;
+            background: linear-gradient(145deg, #24242e 0%, #1a1a20 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 4px solid var(--secondary-color);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        /* 🔽 إضافة ستايل الفوتر الجديد هنا 🔽 */
+        footer {
+            background-color: rgba(42, 42, 50, 0.95);
+            border-top: 3px solid var(--primary-color);
+            padding: 20px 40px;
+            text-align: center;
+            color: var(--muted-text);
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-top: 60px;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
+        }
+
+        footer .highlight-footer {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="university-info">
+            <div>الجمهورية العربية السورية</div>
+            <div>جامعة حمص</div>
+            <div>كلية الهندسة الميكانيكية والكهربائية</div>
+            <div>قسم هندسة التحكم الآلي والحواسيب</div>
+        </div>
+
+        <nav class="nav-buttons">
+            <a href="index.html" class="btn">MAIN</a>
+            <a href="hardware.html" class="btn">HARDWARE</a>
+            <a href="ai.html" class="btn">AI</a>
+            <a href="team.html" class="btn">TEAM & CONCLUSION</a>
+        </nav>
+
+        <div class="logo-container">
+            <div class="logo-box">
+                <img src="public/logo.jpg" alt="لوغو الجامعة">
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="project-title">الخاتمة وفريق العمل البحثي</h1>
+        <h2 class="project-subtitle">مسك ختام الهيكل الهندسي والتحكمي للمشروع</h2>
+
+        <main class="content-section">
+            <h2>خاتمة المشروع (Conclusion)</h2>
+            <p>
+                تم بحمد الله وتوفيقه إنجاز هذا النظام الروبوتي الذكي وتطوير بنيته التحكمية القادرة على استكشاف بؤر النيران ومحاكاة التضاريس البيئية الوعرة بنجاح. يُمثّل هذا البحث دمجاً تطبيقياً فعالاً بين <span class="highlight">الأنظمة الميكانيكية والبرمجيات الذكية المدمجة</span>، لتقديم بديل تكنولوجي آمن قادر على حماية الأرواح والحد من انتشار الكوارث بكفاءة عالية واستجابة زمنية مثالية.
+            </p>
+            
+            <div style="background: rgba(245, 124, 0, 0.1); padding: 15px 25px; border-radius: 10px; border-left: 4px solid var(--secondary-color); margin-top: 25px; text-align: center;">
+                <span style="font-weight: bold; color: var(--secondary-color);">💝 شكر وتقدير:</span> نشكركم جزيل الشكر على زيارة منصة مشروعنا البحثي، ونتمنى أن يُمثّل هذا العمل إضافة علمية واعدة في مجالات التحكم الآلي والرؤية الحاسوبية.
+            </div>
+        </main>
+
+        <section class="content-section" style="border-right-color: var(--primary-color);">
+            <h2 style="text-align: center; color: var(--light-text); margin-bottom: 30px;">فريق العمل والتطوير (The Team)</h2>
+            
+            <div class="team-grid">
+                <div class="member-card">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">👨‍💻</div>
+                    <h3 style="color: var(--secondary-color); margin: 5px 0; font-size: 1.15rem;">الطالب غدير سليمان سليمان</h3>
+                    <p style="color: var(--light-text); margin: 5px 0; font-size: 0.9rem;">طالب سنة خامسة</p>
+                    <p style="color: var(--muted-text); margin: 5px 0; font-size: 0.8rem;">كلية الهندسة الميكانيكية والكهربائية</p>
+                    <p style="color: var(--primary-color); font-weight: bold; margin: 10px 0 0 0; font-size: 0.8rem;">قسم هندسة التحكم الآلي والحواسيب</p>
+                </div>
+ <div class="member-card">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">👩‍💻</div>
+                    <h3 style="color: var(--secondary-color); margin: 5px 0; font-size: 1.15rem;">الطالبة حلا نزار الحمّاد</h3>
+                    <p style="color: var(--light-text); margin: 5px 0; font-size: 0.9rem;">طالبة سنة خامسة</p>
+                    <p style="color: var(--muted-text); margin: 5px 0; font-size: 0.8rem;">كلية الهندسة الميكانيكية والكهربائية</p>
+                    <p style="color: var(--primary-color); font-weight: bold; margin: 10px 0 0 0; font-size: 0.8rem;">قسم هندسة التحكم الآلي والحواسيب</p>
+                </div>
+            </div>
+
+            <div class="supervisor-card">
+                <div style="font-size: 3.2rem; margin-bottom: 10px;">👨‍🏫</div>
+                <div style="letter-spacing: 1px; color: var(--secondary-color); font-size: 0.75rem; font-weight: bold; margin-bottom: 5px;">SUPERVISOR</div>
+                <h3 style="color: var(--light-text); margin: 5px 0; font-size: 1.3rem;">الدكتور المشرف: حيان حسن</h3>
+                <p style="color: var(--muted-text); margin: 5px 0; font-size: 0.9rem;">دكتور في قسم هندسة التحكم الآلي والحواسيب</p>
+                <p style="color: var(--muted-text); margin: 2px 0; font-size: 0.85rem;">كلية الهندسة الميكانيكية والكهربائية</p>
+                <p style="color: var(--primary-color); font-weight: bold; margin-top: 8px; font-size: 1rem;">جامعة حمص</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- 🔽 إضافة كود الفوتر الجديد هنا 🔽 -->
+    <footer>
+        <div>
+            &copy; 2026 جميع الحقوق محفوظة لـ 
+            <span class="highlight-footer">قسم هندسة التحكم الآلي والحواسيب</span> | 
+            كلية الهندسة الميكانيكية والكهربائية - جامعة حمص
+        </div>
+    </footer>
+
+    <script>
+        const currentPage = window.location.pathname.split("/").pop();
+        const buttons = document.querySelectorAll('.nav-buttons .btn');
+
+        buttons.forEach(button => {
+            const buttonHref = button.getAttribute('href');
+            if (currentPage === buttonHref || (buttonHref === "TEAM & CONCLUSION.html")) {
+                button.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>
