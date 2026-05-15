@@ -1,0 +1,585 @@
+ <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>السوفتوير - روبوت تتبع الحرائق</title>
+    <style>
+        :root {
+            --primary-color: #d32f2f; 
+            --secondary-color: #f57c00; 
+            --dark-bg: #1e1e24; 
+            --card-bg: #2a2a32; 
+            --light-text: #ffffff;
+            --muted-text: #b0bec5;
+            --code-bg: #141419;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+        }
+
+        /* الهيدر الموحد والمطابق 100% مع باقي الصفحات */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background-color: rgba(42, 42, 50, 0.95);
+            border-bottom: 3px solid var(--primary-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            height: 130px; 
+            box-sizing: border-box;
+        }
+
+        .university-info { 
+            flex: 1; 
+            text-align: right; 
+            font-size: 0.85rem; 
+            font-weight: bold; 
+            line-height: 1.6; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .nav-buttons { 
+            flex: 2; 
+            display: flex; 
+            justify-content: center; 
+            gap: 15px; 
+        }
+        
+        .logo-container { 
+            flex: 1; 
+            display: flex; 
+            justify-content: flex-end; 
+            align-items: center;
+        }
+        
+        .logo-box { 
+            width: 120px;  
+            height: 120px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
+        
+        .logo-box img { 
+            max-width: 100%; 
+            max-height: 100%; 
+            object-fit: contain; 
+        }
+
+        .btn {
+            background-color: transparent;
+            color: var(--light-text);
+            border: 2px solid var(--primary-color);
+            padding: 8px 22px; 
+            font-size: 0.95rem; 
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn.active {
+            background-color: var(--primary-color) !important;
+            box-shadow: 0 0 15px var(--primary-color);
+            color: white;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h1 {
+            color: var(--secondary-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* قسم المكونات البرمجية الأساسية */
+        .software-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        .sw-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            text-align: right;
+        }
+
+        .sw-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary-color);
+        }
+
+        .sw-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+        }
+ .sw-card h3 {
+            color: var(--secondary-color);
+            margin: 0 0 15px 0;
+            font-size: 1.3rem;
+            border-bottom: 1px dashed rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+
+        .sw-card p {
+            color: var(--muted-text);
+            font-size: 0.95rem;
+            margin: 0;
+            text-align: justify;
+        }
+
+        /* قسم شرح خوارزميات الذكاء الصنعي CNN & YOLO */
+        .ai-explanation-section {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            border-right: 5px solid var(--secondary-color);
+            text-align: right;
+        }
+
+        .ai-explanation-section h2 {
+            color: var(--secondary-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        .ai-flex-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .ai-block {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .ai-block h4 {
+            color: var(--light-text);
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* قسم جدول المقارنة */
+        .comparison-section {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            border-right: 5px solid var(--primary-color);
+            text-align: right;
+        }
+
+        .comparison-section h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background-color: rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: right;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        /* --- القسم الجديد: هندسة الاتصال وتبادل البيانات --- */
+        .architecture-section {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            border-right: 5px solid var(--secondary-color);
+            text-align: right;
+        }
+
+        .architecture-section h2 {
+            color: var(--secondary-color);
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        .arch-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .arch-card {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px 25px;
+            border-radius: 12px;
+            border-right: 4px solid var(--primary-color);
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .arch-badge {
+            background: var(--primary-color);
+            color: #fff;
+            font-weight: bold;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+
+        .arch-info h4 {
+            margin: 0 0 5px 0;
+            color: var(--light-text);
+            font-size: 1.15rem;
+        }
+ .arch-info p {
+            margin: 0;
+            color: var(--muted-text);
+            font-size: 0.95rem;
+            text-align: justify;
+        }
+
+        /* قسم آلية عمل الخوارزمية البصرية */
+        .flowchart-section {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 60px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            border-right: 5px solid var(--primary-color);
+        }
+
+        .flowchart-section h2 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        /* تنسيق فوتر حقوق الطباعة والنشر */
+footer {
+    background-color: rgba(42, 42, 50, 0.95);
+    border-top: 3px solid var(--primary-color);
+    padding: 20px 40px;
+    text-align: center;
+    color: var(--muted-text);
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-top: 60px;
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
+}
+
+footer .highlight-footer {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="university-info">
+            <div>الجمهورية العربية السورية</div>
+            <div>جامعة حمص</div>
+            <div>كلية الهندسة الميكانيكية والكهربائية</div>
+            <div>قسم هندسة التحكم الآلي والحواسيب</div>
+        </div>
+        
+        <nav class="nav-buttons">
+            <a href="index.html" class="btn">MAIN</a>
+            <a href="hardware.html" class="btn">HARDWARE</a>
+            <a href="ai.html" class="btn">AI</a>
+            <a href="TEAM & CONCLUSION.html" class="btn">TEAM & CONCLUSION</a>
+        </nav>
+
+        <div class="logo-container">
+            <div class="logo-box">
+                <img src="public/logo.jpg" alt="Logo">
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-header">
+            <h1>البنية البرمجية والذكية</h1>
+            <p>البيئات البرمجية، الخوارزميات المعتمدة، وآلية معالجة البيانات واتخاذ القرار</p>
+        </div>
+
+        <!-- شبكة المكونات البرمجية واللغات -->
+        <div class="software-grid">
+            <div class="sw-card">
+                <div class="sw-icon">💻</div>
+                <h3>بيئة التطوير Arduino IDE</h3>
+                <p>استُخدمت لكتابة وتطوير الشيفرات البرمجية الموجهة لمتحكم الأردوينو، والتي تتضمن إدارة الإشارات الرقمية والتناظرية القادمة من الحساسات، والتحكم بمحركات الـ DC عبر دارة القيادة.</p>
+            </div>
+
+            <div class="sw-card">
+                <div class="sw-icon">🤖</div>
+                <h3>خوارزميات الرؤية الحاسوبية (Computer Vision)</h3>
+                <p>تجهيز الكاميرا لالتقاط البث المباشر الموجه وتحليل الإطارات الصورية في الوقت الحقيقي (Real-Time)، وذلك لتحديد الأنماط اللونية واللهب والخصائص الحرارية المميّزة للحريق.</p>
+            </div>
+
+            <div class="sw-card">
+                <div class="sw-icon">🐍</div>
+                <h3>لغة البرمجة Python & MicroPython</h3>
+                <p>وظفت في بناء ومعالجة خوارزميات اتخاذ القرار، مع دمج التقنيات الذكية لتحسين استجابة الروبوت وتحليل البيانات الرادارية أو البصرية القادمة من وحدة البث اللاسلكي.</p>
+            </div>
+        </div>
+
+        <!-- قسم شرح خوارزميات الذكاء الصنعي المستهدفة -->
+        <div class="ai-explanation-section">
+            <h2>خوارزميات الرؤية الحاسوبية والتعلم العميق</h2>
+            <p>يعتمد الروبوت في معالجة الصور واستكشاف الحرائق على تقنيات التعلم العميق (Deep Learning) لتحقيق دقة عالية في تمييز النيران وتجنب الإنذارات الخاطئة الناتجة عن الإضاءة أو الألوان المشابهة للهب. تم التركيز على مفهومين أساسيين:</p>
+            
+            <div class="ai-flex-container">
+                <div class="ai-block">
+                    <h4>🔍 الشبكات العصبونية الالتفافية (CNN - Convolutional Neural Networks)</h4>
+                    <p>هي معمارية عصبونية مخصصة لتحليل البيانات المرئية (الصور والفيديوهات). تعمل الـ CNN على استخلاص الميزات (Features) من الصورة تدريجياً عبر طبقات الالتفاف والتجميع (Convolution & Pooling Layers)، حيث تبدأ بالتقاط الحواف والزوايا ثم تنتقل لتمييز الأشكال المعقدة وصولاً إلى تصنيف الصورة كاملة (مثال: تصنيف هل تحتوي الصورة على "حريق" أم "لا").</p>
+                </div>
+
+                <div class="ai-block">
+                    <h4>⚡ نموذج YOLO (You Only Look Once)</h4>
+ <p>هو خوارزمية ثورية مبنية في الأصل على معمارية الـ CNN، لكنها مخصصة لمهام تحديد الأشخاص والأشياء في الوقت الحقيقي (Real-Time Object Detection). على عكس الأنظمة التقليدية التي تفحص أجزاء مختلفة من الصورة بشكل متكرر، يقوم YOLO بتمرير الصورة كاملة عبر الشبكة العصبونية مرة واحدة فقط، ويقوم بتحديد أماكن الحرائق ورسم صناديق الإحاطة (Bounding Boxes) حولها وتصنيفها في نفس اللحظة بسرعة فائقة جداً.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- قسم جدول المقارنة والفرق بينهما -->
+        <div class="comparison-section">
+            <h2>الفرق الجوهري بين CNN التقليدية و YOLO</h2>
+            <p>لتوضيح سبب الاعتماد على هندسة المعالجة الذكية الهجينة في الروبوت، يوضح الجدول التالي مقارنة تقنية بين التقنيتين الدارجتين في الرؤية الحاسوبية:</p>
+            
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>وجه المقارنة</th>
+                            <th>الشبكات الالتفافية التقليدية (CNN)</th>
+                            <th>نموذج YOLO المطور</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>المهمة الأساسية</strong></td>
+                            <td>تصنيف الصورة بالكامل (Image Classification) دون معرفة موقع الجسم بدقة.</td>
+                            <td>تحديد وتحديد مكان الأجسام (Object Detection) مع رسم صندوق إحاطة.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>آلية المعالجة</strong></td>
+                            <td>تقسم الصورة إلى مناطق اهتمام متعددة وتفحص كل منطقة على حدة.</td>
+                            <td>تقسم الصورة إلى شبكة (Grid) وتتنبأ بالصناديق والاحتمالات بنقرة واحدة "تنظر مرة واحدة".</td>
+                        </tr>
+                        <tr>
+                            <td><strong>السرعة (FPS)</strong></td>
+                            <td>بطيئة نسبيًا ولا تصلح بشكل مثالي للبث المباشر عالي السرعة.</td>
+                            <td>فائقة السرعة وتصل لأكثر من 45 إطاراً في الثانية، ممتازة للبث المباشر.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>الاستخدام في الروبوت</strong></td>
+                            <td>تُستخدم في تأكيد وجود الحريق بعد استخلاص الخصائص اللونية والحرارية للإطار.</td>
+                            <td>تُستخدم لتتبع وتحديد إحداثيات مركز اللهب وملاحقته حركياً وتفادي العوائق.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- قسم معماري النظام وتبادل البيانات (الفكرة الرابعة) -->
+        <div class="architecture-section">
+            <h2>بنية وتكامل النظام الموزع (System Architecture)</h2>
+            <p>لضمان سرعة المعالجة وعدم إثقال كاهل المعالجات الدقيقة الصغيرة المركبة على متن الروبوت، يعتمد النظام على بنية برمجية موزعة توزع المهام عبر طبقات وبروتوكولات اتصال واضحة:</p>
+            
+            <div class="arch-steps">
+                <div class="arch-card">
+                    <div class="arch-badge">بروتوكول HTTP / Wi-Fi</div>
+                    <div class="arch-info">
+                        <h4>1. التقاط وبث تيار الفيديو (Video Streaming)</h4>
+                        <p>تقوم وحدة الكاميرا الذكية <strong>ESP32-CAM</strong> بالتقاط صور البيئة المحيطة بتردد مرتفع وتعمل كـ Local Web Server، حيث تبث تيار الصور اللاسلكي عبر شبكة الواي فاي المحلية على شكل حزم بيانات موجهة إلى حاسب المعالجة المركزي.</p>
+                    </div>
+                </div>
+
+                <div class="arch-card">
+                    <div class="arch-badge">المعالجة المركزية</div>
+                    <div class="arch-info">
+                        <h4>2. طبقة الذكاء الصنعي واتخاذ القرار (AI Inference)</h4>
+ <p>يستقبل تطبيق <strong>Python</strong> المستضاف على الحاسب دفق الفيديو المستمر، ويقوم بتمريره مباشرة على نموذج <strong>YOLO</strong> المدرب للتعرف على اللهب. عند رصد الحريق، تحسب الخوارزمية إحداثيات انزياح مركز اللهب عن مركز عدسة الكاميرا لتحديد زاوية التوجه بدقة.</p>
+                    </div>
+                </div>
+
+                <div class="arch-card">
+                    <div class="arch-badge">الاتصال التسلسلي (UART)</div>
+                    <div class="arch-info">
+                        <h4>3. بروتوكول التحكم والتنفيذ الفيزيائي (Actuation Loop)</h4>
+                        <p>بمجرد اتخاذ القرار البرمجي، يتم إرسال حروف توجيهية مشفرة (مثل 'F' للأمام، 'L' لليسار) عبر منفذ الاتصال التسلسلي (Serial/UART) إلى متحكم <strong>Arduino Uno</strong>، والذي يقوم فوراً بترجمتها إلى إشارات نبضية (PWM) لدارة الـ L298N للتحكم بحركة أرجل الروبوت وملاحقة الهدف.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- قسم مخطط تدفق البيانات المطور برمجياً بـ SVG -->
+        <div class="flowchart-section">
+            <h2>مخطط تدفق العمليات البرمجية (Flowchart)</h2>
+            <p>يوضح المخطط أدناه تسلسل العمليات البرمجية وحلقة التحكم المغلقة بدءاً من استشعار البيئة وحتى اتخاذ القرار وملاحقة اللهب:</p>
+            
+            <div class="flowchart-container" style="background-color: #141419; padding: 30px; border-radius: 15px; display: flex; justify-content: center;">
+                <svg viewBox="0 0 800 900" width="100%" height="100%" style="max-width: 650px; font-family: 'Segoe UI', sans-serif;">
+                    <defs>
+                        <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 0 L 10 5 L 0 10 z" fill="#f57c00"/>
+                        </marker>
+                    </defs>
+
+                    <!-- 1. البداية -->
+                    <rect x="300" y="20" width="200" height="50" rx="25" fill="#d32f2f" stroke="#ffffff" stroke-width="2"/>
+                    <text x="400" y="52" fill="#ffffff" font-size="16" font-weight="bold" text-anchor="middle">بداية التشغيل / Start</text>
+                    <line x1="400" y1="70" x2="400" y2="110" stroke="#f57c00" stroke-width="3" marker-end="url(#arrow)"/>
+
+                    <!-- 2. تهيئة النظام -->
+                    <rect x="250" y="110" width="300" height="60" rx="8" fill="#2a2a32" stroke="#d32f2f" stroke-width="2"/>
+                    <text x="400" y="135" fill="#ffffff" font-size="15" font-weight="bold" text-anchor="middle">تهيئة النظام والمكونات</text>
+                    <text x="400" y="155" fill="#b0bec5" font-size="12" text-anchor="middle">(Arduino, ESP32-CAM, Sensors, Motors)</text>
+                    <line x1="400" y1="170" x2="400" y2="210" stroke="#f57c00" stroke-width="3" marker-end="url(#arrow)"/>
+
+                    <!-- 3. جلب البيانات -->
+                    <polygon points="230,220 570,220 540,280 200,280" fill="#2a2a32" stroke="#f57c00" stroke-width="2"/>
+                    <text x="385" y="255" fill="#ffffff" font-size="15" font-weight="bold" text-anchor="middle">قراءة بيانات الحساسات وبث الكاميرا</text>
+                    <line x1="385" y1="280" x2="385" y2="320" stroke="#f57c00" stroke-width="3" marker-end="url(#arrow)"/>
+
+                    <!-- 4. القرار الأول: اكتشاف حريق؟ -->
+                    <polygon points="385,320 530,370 385,420 240,370" fill="#d32f2f" stroke="#ffffff" stroke-width="2"/>
+                    <text x="385" y="375" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle">هل تم كشف لهب أو حرارة؟</text>
+                    
+                    <!-- خط (لا) -->
+                    <line x1="240" y1="370" x2="140" y2="370" stroke="#b0bec5" stroke-width="3"/>
+ <line x1="140" y1="370" x2="140" y2="250" stroke="#b0bec5" stroke-width="3"/>
+                    <line x1="140" y1="250" x2="190" y2="250" stroke="#b0bec5" stroke-width="3" marker-end="url(#arrow)"/>
+                    <text x="180" y="360" fill="#b0bec5" font-size="14" font-weight="bold">لا</text>
+
+                    <!-- خط (نعم) -->
+                    <line x1="385" y1="420" x2="385" y2="460" stroke="#f57c00" stroke-width="3" marker-end="url(#arrow)"/>
+                    <text x="400" y="445" fill="#ffffff" font-size="14" font-weight="bold">نعم</text>
+
+                    <!-- 5. تشغيل الذكاء الصنعي -->
+                    <rect x="230" y="460" width="310" height="60" rx="8" fill="#2a2a32" stroke="#f57c00" stroke-width="2"/>
+                    <text x="385" y="485" fill="#ffffff" font-size="15" font-weight="bold" text-anchor="middle">تفعيل معالجة الرؤية الحاسوبية</text>
+                    <text x="385" y="505" fill="#f57c00" font-size="13" font-weight="bold" text-anchor="middle">خوارزميات CNN & YOLO</text>
+                    <line x1="385" y1="520" x2="385" y2="560" stroke="#f57c00" stroke-width="3" marker-end="url(#arrow)"/>
+
+                    <!-- 6. تحديد الإحداثيات -->
+                    <rect x="230" y="560" width="310" height="50" rx="8" fill="#2a2a32" stroke="#ffffff" stroke-width="1"/>
+                    <text x="385" y="590" fill="#b0bec5" font-size="14" text-anchor="middle">تحديد إحداثيات مركز اللهب ورسم صندوق الإحاطة</text>
+                    <line x1="385" y1="610" x2="385" y2="650" stroke="#f57c00" stroke-width="3" marker-end="url(#arrow)"/>
+
+                    <!-- 7. القرار الثاني: وجود عوائق؟ -->
+                    <polygon points="385,650 510,695 385,740 260,695" fill="#2a2a32" stroke="#f57c00" stroke-width="2"/>
+                    <text x="385" y="700" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle">هل يوجد عائق في الطريق؟</text>
+
+                    <!-- خط عائق (نعم) -->
+                    <line x1="260" y1="695" x2="160" y2="695" stroke="#f57c00" stroke-width="3" marker-end="url(#arrow)"/>
+                    <text x="210" y="685" fill="#f57c00" font-size="14" font-weight="bold">نعم</text>
+                    <rect x="40" y="665" width="120" height="60" rx="8" fill="#d32f2f" stroke="#ffffff" stroke-width="1"/>
+                    <text x="100" y="700" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle">تفادي العائق والالتفاف</text>
+
+                    <!-- خط عائق (لا) -->
+                    <line x1="385" y1="740" x2="385" y2="780" stroke="#f57c00" stroke-width="3" marker-end="url(#arrow)"/>
+                    <text x="400" y="765" fill="#ffffff" font-size="14" font-weight="bold">لا</text>
+                    <rect x="250" y="780" width="270" height="50" rx="8" fill="#f57c00" stroke="#ffffff" stroke-width="1"/>
+                    <text x="385" y="810" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle">التوجه مباشرة نحو الحريق لتتبعه</text>
+
+                    <!-- تجميع المسارات لتوجيه الأوامر للمحركات -->
+                    <path d="M 100 725 L 100 860 L 385 860" fill="none" stroke="#f57c00" stroke-width="3"/>
+                    <path d="M 385 830 L 385 860" fill="none" stroke="#f57c00" stroke-width="3" marker-end="url(#arrow)"/>
+
+                    <!-- 8. إرسال أوامر الحركة وإعادة الحلقة -->
+                    <rect x="270" y="860" width="230" height="40" rx="5" fill="#2a2a32" stroke="#d32f2f" stroke-width="2"/>
+                    <text x="385" y="885" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle">إرسال أوامر التوجيه للمحركات</text>
+                    
+                    <!-- العودة للبدء من جديد (حلقة مغلقة) -->
+                    <path d="M 500 880 L 740 880 L 740 250 L 550 250" fill="none" stroke="#b0bec5" stroke-width="3" marker-end="url(#arrow)"/>
+ </svg>
+            </div>
+            <div class="flowchart-caption" style="margin-top: 15px; font-size: 0.95rem; color: var(--muted-text); text-align: center;">
+                آلية اتخاذ القرار والتحكم الحلقي المغلق (Closed-Loop) لتتبع اللهب وتفادي العوائق البيئية برؤية حاسوبية ذكية.
+            </div>
+        </div>
+    </div>
+
+<script>
+    const currentPage = window.location.pathname.split("/").pop();
+    const buttons = document.querySelectorAll('.nav-buttons .btn');
+
+    buttons.forEach(button => {
+        const buttonHref = button.getAttribute('href');
+        if (currentPage === buttonHref) {
+            button.classList.add('active');
+        }
+        if ((currentPage === "" || currentPage === "index.html") && buttonHref === "index.html") {
+            button.classList.add('active');
+        }
+    });
+    
+</script>
+<!-- فوتر حقوق الطباعة والنشر الموحد -->
+   <footer>
+       <div>
+           &copy; 2026 جميع الحقوق محفوظة لـ 
+           <span class="highlight-footer">قسم هندسة التحكم الآلي والحواسيب</span> | 
+           كلية الهندسة الميكانيكية والكهربائية - جامعة حمص
+       </div>
+   </footer>
+</body>
+</html>

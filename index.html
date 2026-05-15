@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>روبوت تتبع الحرائق بالذكاء الصنعي</title>
+    <style>
+        /* الهوية البصرية للمشروع */
+        :root {
+            --primary-color: #d32f2f; 
+            --secondary-color: #f57c00; 
+            --dark-bg: #1e1e24; 
+            --card-bg: #2a2a32; 
+            --light-text: #ffffff;
+            --muted-text: #b0bec5;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+        }
+
+        /* الهيدر الموحد والمطابق بعد تكبير اللوجو */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background-color: rgba(42, 42, 50, 0.95);
+            border-bottom: 3px solid var(--primary-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            height: 130px; /* زيادة ارتفاع الهيدر ليتناسب مع الحجم الجديد */
+            box-sizing: border-box;
+        }
+
+        .university-info {
+            flex: 1;
+            text-align: right;
+            font-size: 0.85rem;
+            font-weight: bold;
+            line-height: 1.6; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .nav-buttons {
+            flex: 2;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .logo-container {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .logo-box {
+            width: 120px;  /* تم التكبير إلى 120px */
+            height: 120px; /* تم التكبير إلى 120px */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* أزرار التنقل والربط */
+        .btn {
+            background-color: transparent;
+            color: var(--light-text);
+            border: 2px solid var(--primary-color);
+            padding: 8px 22px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn.active {
+            background-color: var(--primary-color) !important;
+            box-shadow: 0 0 15px var(--primary-color);
+            color: white;
+        }
+
+        .container {
+            max-width: 1050px;
+            margin: 50px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .project-title {
+            font-size: 2.8rem;
+            color: var(--secondary-color);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+            font-weight: 800;
+        }
+
+        .project-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 45px;
+            font-weight: 300;
+        }
+
+        .content-section {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: justify;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            border-right: 5px solid var(--secondary-color);
+            margin-bottom: 40px;
+        }
+
+        .highlight {
+            color: var(--light-text);
+            font-weight: 600;
+            border-bottom: 1px dotted var(--secondary-color);
+        }
+
+        .gallery-section {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            border-right: 5px solid var(--primary-color);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+.image-card {
+            background: #1e1e24;
+            border-radius: 10px;
+            overflow: hidden;
+            max-width: 900px;
+            margin: 25px auto 0;
+        }
+        
+        .image-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .image-caption {
+            padding: 15px;
+            font-size: 1rem;
+            color: var(--muted-text);
+            background: rgba(0, 0, 0, 0.3);
+        }
+        /* تنسيق فوتر حقوق الطباعة والنشر */
+footer {
+    background-color: rgba(42, 42, 50, 0.95);
+    border-top: 3px solid var(--primary-color);
+    padding: 20px 40px;
+    text-align: center;
+    color: var(--muted-text);
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-top: 60px;
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
+}
+
+footer .highlight-footer {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="university-info">
+            <div>الجمهورية العربية السورية</div>
+            <div>جامعة حمص</div>
+            <div>كلية الهندسة الميكانيكية والكهربائية</div>
+            <div>قسم هندسة التحكم الآلي والحواسيب</div>
+        </div>
+
+        <nav class="nav-buttons">
+            <a href="index.html" class="btn ">MAIN</a>
+            <a href="hardware.html" class="btn"> HARDWARE</a>
+            <a href="ai.html" class="btn">AI </a>
+            <a href="TEAM & CONCLUSION.html" class="btn">TEAM & CONCLUSION </a>
+        </nav>
+
+        <div class="logo-container">
+            <div class="logo-box">
+                <img src="public/logo.jpg" alt="لوغو الجامعة">
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="project-title">روبوت محاكي للأرجل لتتبع واستكشاف الحرائق</h1>
+        <h2 class="project-subtitle">باعتماد خوارزميات الرؤية الحاسوبية والأنظمة الذكية</h2>
+
+        <main class="content-section">
+            <h2>مقدمة ووصف عام للمشروع</h2>
+            <p>
+                تُعدّ الكوارث البيئية الناجمة عن حرائق الغابات والمنشآت الصناعية الكبرى أحد أعقد التحديات التي تواجه فرق السلامة والدفاع المدني عالمياً. تنطوي عمليات التدخل البشري التقليدية على مخاطر جسيمة تهدد الأرواح، مما يبرز الحاجة لأنظمة ذاتية التحكم قادرة على إسناد العنصر البشري في مهام الاستطلاع الأولي الاستباقي.
+            </p>
+            <p>
+                يتمحور المشروع حول <span class="highlight">تطوير نظام روبوتي متكامل مستند إلى أرجل آليّة (Legged Robot)</span> لتجاوز العوائق واجتياز التضاريس المعقدة، مع تزويده بنظام إدراك بيئي هجين يدمج بين الاستشعار الحراري والرؤية الحاسوبية المدعومة بـ <span class="highlight">الذكاء الصنعي (AI)</span>.
+            </p>
+        </main>
+
+        <section class="gallery-section">
+            <h2>البيئة المستهدفة ومحاكاة المخاطر</h2>
+            <div class="image-card">
+                <img src="public/fire1.png" alt="انتشار حرائق الغابات">
+                <div class="image-caption">
+                    تحليل طبيعة التضاريس الجغرافية الوعرة والمساحات الحرجية المعقدة المستهدفة في عمليات الاستكشاف والتتبع.
+                </div>
+            </div>
+        </section>
+    </div>
+
+<script>
+    const currentPage = window.location.pathname.split("/").pop();
+    const buttons = document.querySelectorAll('.nav-buttons .btn');
+
+    buttons.forEach(button => {
+        const buttonHref = button.getAttribute('href');
+        if (currentPage === buttonHref) {
+            button.classList.add('active');
+        }
+        if ((currentPage === "" || currentPage === "index.html") && buttonHref === "index.html") {
+            button.classList.add('active');
+        }
+    });
+    
+</script
+<!-- فوتر حقوق الطباعة والنشر الموحد -->
+   <footer>
+       <div>
+           &copy; 2026 جميع الحقوق محفوظة لـ 
+           <span class="highlight-footer">قسم هندسة التحكم الآلي والحواسيب</span> | 
+           كلية الهندسة الميكانيكية والكهربائية - جامعة حمص
+       </div>
+   </footer>
+</body>
+</html>

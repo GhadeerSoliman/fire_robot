@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الهاردوير - روبوت تتبع الحرائق</title>
+    <style>
+        :root {
+            --primary-color: #d32f2f; 
+            --secondary-color: #f57c00; 
+            --dark-bg: #1e1e24; 
+            --card-bg: #2a2a32; 
+            --light-text: #ffffff;
+            --muted-text: #b0bec5;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+        }
+
+        /* الهيدر الموحد والمطابق بعد تكبير اللوجو */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background-color: rgba(42, 42, 50, 0.95);
+            border-bottom: 3px solid var(--primary-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            height: 130px; /* زيادة ارتفاع الهيدر ليتناسب مع الحجم الجديد */
+            box-sizing: border-box;
+        }
+
+        .university-info { 
+            flex: 1; 
+            text-align: right; 
+            font-size: 0.85rem; 
+            font-weight: bold; 
+            line-height: 1.6; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .nav-buttons { 
+            flex: 2; 
+            display: flex; 
+            justify-content: center; 
+            gap: 15px; 
+        }
+        
+        .logo-container { 
+            flex: 1; 
+            display: flex; 
+            justify-content: flex-end; 
+            align-items: center;
+        }
+        
+        .logo-box { 
+            width: 120px;  /* تم التكبير إلى 120px */
+            height: 120px; /* تم التكبير إلى 120px */
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
+        
+        .logo-box img { 
+            max-width: 100%; 
+            max-height: 100%; 
+            object-fit: contain; 
+        }
+
+        .btn {
+            background-color: transparent;
+            color: var(--light-text);
+            border: 2px solid var(--primary-color);
+            padding: 8px 22px; 
+            font-size: 0.95rem; 
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn.active {
+            background-color: var(--primary-color) !important;
+            box-shadow: 0 0 15px var(--primary-color);
+            color: white;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h1 {
+            color: var(--secondary-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .hardware-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        .hw-card {
+            background-color: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hw-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--secondary-color);
+        }
+
+        .hw-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            background-color: #1a1a1a;
+            display: block;
+        }
+.hw-content {
+            padding: 20px;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .hw-content h3 {
+            color: var(--secondary-color);
+            margin: 0 0 10px 0;
+            font-size: 1.2rem;
+        }
+
+        .hw-content p {
+            color: var(--muted-text);
+            font-size: 0.9rem;
+            margin: 0;
+            text-align: justify;
+        }
+
+        /* --- القسم المطور للتصميم النهائي بدون سواد --- */
+        .final-design-section {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 50px;
+            margin-bottom: 60px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .final-images-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .final-image-wrapper {
+            flex: 1;
+            height: 350px;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid var(--secondary-color);
+            transition: 0.4s ease-in-out;
+        }
+
+        .final-image-wrapper:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 20px var(--secondary-color);
+        }
+
+        .final-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        /* تنسيق فوتر حقوق الطباعة والنشر */
+footer {
+    background-color: rgba(42, 42, 50, 0.95);
+    border-top: 3px solid var(--primary-color);
+    padding: 20px 40px;
+    text-align: center;
+    color: var(--muted-text);
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-top: 60px;
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
+}
+
+footer .highlight-footer {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+    </style>
+    
+</head>
+<body>
+
+    <header>
+        <div class="university-info">
+            <div>الجمهورية العربية السورية</div>
+            <div>جامعة حمص</div>
+            <div>كلية الهندسة الميكانيكية والكهربائية</div>
+            <div>قسم هندسة التحكم الآلي والحواسيب</div>
+        </div>
+        
+        <nav class="nav-buttons">
+            <a href="index.html" class="btn ">MAIN</a>
+            <a href="hardware.html" class="btn"> HARDWARE</a>
+            <a href="ai.html" class="btn">AI </a>
+            <a href="TEAM & CONCLUSION.html" class="btn">TEAM & CONCLUSION </a>
+        </nav>
+
+        <div class="logo-container">
+            <div class="logo-box">
+                <img src="public/logo.jpg" alt="Logo">
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="section-header">
+            <h1>المكونات العتادية للنظام</h1>
+            <p>تفاصيل القطع الإلكترونية والميكانيكية المستخدمة في بناء الروبوت</p>
+        </div>
+
+        <div class="hardware-grid">
+            
+            <div class="hw-card">
+                <img src="public/arduno uno.jpg" alt="Arduino Uno">
+                <div class="hw-content">
+                    <h3>Arduino Uno</h3>
+                    <p>المتحكم الدقيق الأساسي المسؤول عن معالجة البيانات من الحساسات وإرسال أوامر التحكم للمحركات ودارة القيادة.</p>
+                </div>
+            </div>
+
+            <div class="hw-card">
+                <img src="public/esp32cam.jpeg" alt="ESP32-CAM">
+                <div class="hw-content">
+                    <h3>ESP32-CAM</h3>
+                    <p>وحدة الكاميرا المزودة بتقنية الواي فاي، تُستخدم لبث الفيديو المباشر ومعالجة الصور الأولية للكشف عن الحريق.</p>
+                </div>
+            </div>
+
+            <div class="hw-card">
+                <img src="public/l298n.jpg" alt="L298N">
+                <div class="hw-content">
+                    <h3>دارة القيادة L298N</h3>
+                    <p>جسر H (H-Bridge) مزدوج يسمح بالتحكم في اتجاه وسرعة محركي الـ DC بكفاءة عالية ومن مصدر طاقة خارجي.</p>
+                </div>
+            </div>
+
+            <div class="hw-card">
+                <img src="public/dc motor.jpg" alt="DC Motors">
+                <div class="hw-content">
+                    <h3>محركات DC (عدد 2)</h3>
+                    <p>المشغلات الميكانيكية المسؤولة عن تأمين الحركة اللازمة للروبوت للتنقل في بيئة المحاكاة.</p>
+                </div>
+            </div>
+ <div class="hw-card">
+                <img src="public/BATTERIES.jpg" alt="Batteries">
+                <div class="hw-content">
+                    <h3>بطاريات ليثيوم</h3>
+                    <p>مصدر الطاقة الأساسي للنظام، توفر جهد وتيار مستقر لضمان عمل المحركات والمعالجات لفترات كافية.</p>
+                </div>
+            </div>
+            
+            <div class="hw-card">
+                <img src="public/stepdown.jpg" alt="Voltage Regulator">
+                <div class="hw-content">
+                    <h3>مقطع / منظم جهد</h3>
+                    <p>وحدة خفض أو تنظيم الجهد لضمان تزويد القطع الحساسة (مثل الـ ESP32) بجهد دقيق وحمايتها من التلف.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="final-design-section">
+            <h2>التصميم النهائي للروبوت</h2>
+            <p>استعراض متكامل للشكل الفيزيائي النهائي للروبوت وتوزيع المكونات بعد التجميع.</p>
+            
+            <div class="final-images-container">
+                <div class="final-image-wrapper">
+                    <img src="public/ROBOT1.jpg" alt="التصميم النهائي - عرض أمامي">
+                </div>
+                <div class="final-image-wrapper">
+                    <img src="public/ROBOT3.jpg" alt="التصميم النهائي - عرض جانبي">
+                </div>
+                <div class="final-image-wrapper">
+                    <img src="public/ROBOT2.jpg" alt="التصميم النهائي - عرض علوي">
+                </div>
+          
+            </div>
+
+        </div>
+        <div class="final-design-section">
+    <h2>العرض العملي لتشغيل الروبوت</h2>
+    <p>فيديو توضيحي يستعرض اختبار حركة الروبوت المحاكي للأرجل وآلية عمل المكونات العتادية في بيئة المحاكاة:</p>
+    
+    <div style="max-width: 800px; margin: 25px auto 0; border-radius: 15px; overflow: hidden; border: 2px solid var(--primary-color); box-shadow: 0 10px 25px rgba(0,0,0,0.4); background: #000;">
+        <!-- وسم الفيديو مع أزرار التحكم والتشغيل تلقائياً بدون صوت لضمان توافق المتصفحات -->
+        <video controls width="100%" style="display: block;">
+            <source src="public/ROBOT_DEMO.mp4" type="video/mp4">
+            عذراً، متصفحك لا يدعم تشغيل هذا الفيديو.
+        </video>
+    </div>
+</div>
+    </div>
+
+<script>
+    const currentPage = window.location.pathname.split("/").pop();
+    const buttons = document.querySelectorAll('.nav-buttons .btn');
+
+    buttons.forEach(button => {
+        const buttonHref = button.getAttribute('href');
+        if (currentPage === buttonHref) {
+            button.classList.add('active');
+        }
+        if ((currentPage === "" || currentPage === "index.html") && buttonHref === "index.html") {
+            button.classList.add('active');
+        }
+    });
+    
+</script>
+<!-- فوتر حقوق الطباعة والنشر الموحد -->
+   <footer>
+       <div>
+           &copy; 2026 جميع الحقوق محفوظة لـ 
+           <span class="highlight-footer">قسم هندسة التحكم الآلي والحواسيب</span> | 
+           كلية الهندسة الميكانيكية والكهربائية - جامعة حمص
+       </div>
+   </footer>
+</body>
+</html>
